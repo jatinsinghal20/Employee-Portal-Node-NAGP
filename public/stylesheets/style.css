@@ -1,0 +1,87 @@
+body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+/* Made with love by Mutiullah Samim*/
+
+@import url('https://fonts.googleapis.com/css?family=Numans');
+html, body {
+  background-color: #000000;
+  background-image: linear-gradient(147deg, #000000 0%, #04619f 74%);
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100%;
+  font-family: 'Numans', sans-serif;
+}
+
+.container {
+  height: 100%;
+  align-content: center;
+}
+
+.card {
+  height: 370px;
+  margin-top: auto;
+  margin-bottom: auto;
+  width: 400px;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.welcome-card {
+  height: 370px;
+  margin-top: auto;
+  margin-bottom: auto;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  text-align: center;
+}
+
+.card-header h3 {
+  color: white;
+}
+
+.input-group-prepend span {
+  width: 50px;
+  background-color: #FFC312;
+  color: black;
+  border: 0 !important;
+}
+
+input:focus {
+  outline: 0 0 0 0 !important;
+  box-shadow: 0 0 0 0 !important;
+}
+
+.login_btn {
+  color: black;
+  background-color: white;
+}
+
+.links {
+  color: white;
+}
+
+.links a {
+  margin-left: 4px;
+}
+
+.white {
+  color: white;
+}
+
+.auto-margin {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.card-create-project {
+  height: 70%;
+  margin-top: auto;
+  margin-bottom: auto;
+  width: 70%;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}

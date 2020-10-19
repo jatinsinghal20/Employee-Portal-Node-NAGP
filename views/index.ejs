@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<% include partials/head %>
+
+<body>
+  <%- include('partials/navbar', {loggedInUser : null}); %>
+  <div class="container">
+    <div class="d-flex justify-content-center h-100">
+      <div class="welcome-card">
+        <div class="card-header">
+          <h3>Welcome To Employee Portal</h3>
+        </div>
+        <div class="card-body">
+          <h5 class="d-flex justify-content-center links">
+            Welcome to NAGP cool portal
+            <br>
+            You can do various things inside this portal like
+            <br>
+            If you are a Manager, you can create and delete openings for your project.
+            <br>
+            If you are an Employee, you can apply for the openings.
+          </h5>
+        </div>
+        <div class="card-footer">
+          <a href="login"><button type="button" class="btn btn-light">Sign In</button></a>
+          <a href="register"><button style="margin-left: 20px;" type="button" class="btn btn-light">Sign Up</button></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

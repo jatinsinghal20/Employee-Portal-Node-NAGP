@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<% include partials/head %>
+
+<body>
+    <%- include('partials/navbar', {loggedInUser : username}); %>
+    <div class="container">
+        <div class="d-flex justify-content-center h-100">
+            <div class="card-create-project">
+                <div class="card-header">
+                    <h3>Add New Project Opening</h3>
+                </div>
+                <div class="card-body">
+                    <form action="/project" method="post">
+                        <div class="input-group form-group">
+                            <input name="name" type="text" class="form-control" placeholder="Project Name" required />
+                        </div>
+                        <div class="input-group form-group">
+                            <input name="client" type="text" class="form-control" placeholder="Client" required />
+                        </div>
+                        <div class="input-group form-group">
+                            <input name="role" type="text" class="form-control" placeholder="Role" required />
+                        </div>
+                        <div class="input-group form-group">
+                            <textarea name="description" type="text" class="form-control" placeholder="Description"
+                                required></textarea> />
+                        </div>
+                        <div class="input-group form-group">
+                            <input name="technology" type="text" class="form-control" placeholder="Technology"
+                                required />
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Add Opening" class="btn float-right login_btn">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

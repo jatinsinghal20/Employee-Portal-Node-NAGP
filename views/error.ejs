@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<% include partials/head %>
+
+<body>
+   <div class="container">
+      <div class=" white">
+         <div>
+            <h1><%= message %></h1>
+         </div>
+         <br />
+         <div>
+            <h2><%= error.status %></h2>
+            <pre><%= error.stack %></pre>
+         </div>
+      </div>
+   </div>
+</body>
+
+</html>
