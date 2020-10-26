@@ -1,57 +1,22 @@
 var express = require('express');
 const passport = require('passport');
-const validation = require('../middlewares/validation');
-const User = require('../model/user');
+const indexController = require('../controller/index-controller');
 var router = express.Router();
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
-    res.render('index');
-});
+router.get('/', indexController.renderHomePage);
 
+/* GET registration page. */
+router.get('/register', indexController.renderRegistrationPage);
 
-router.get('/register', function (req, res, next) {
-    res.render('register');
-});
+/* GET Login page. */
+router.get('/login', indexController.renderLoginPage);
 
-router.get('/login', function (req, res, next) {
-    let error = false;
-    if (req.query.hasOwnProperty('error')) {
-        error = true;
-    }
-    res.render('login', { error: error });
-});
+/* Logout user*/
+router.get('/logout', indexController.logoutUser);
 
-router.get('/logout', function (req, res, next) {
-    req.logOut();
-    req.session.destroy((err) => {
-        res.redirect('/');
-    })
-});
-
-
-
-
-router.post('/register', async (req, res, next) => {
-    const user = new User(req.body);
-    if (await validation.validateRegistration(user.username, user.password, user.role)) {
-        await user.setHashedPassword();
-        user.save((err, savedUser) => {
-            if (err) {
-                next(createError(500, err.errorMessage));
-            }
-            req.login(user, (err) => {
-                if (err) {
-                    next(createError(500, err.errorMessage));
-                }
-                res.redirect('/project');
-            })
-        });
-    } else {
-        res.redirect('/register');
-    }
-
-});
+/* Register new user. */
+router.post('/register', indexController.registerUser);
 
 
 /* Login user */

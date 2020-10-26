@@ -1,9 +1,7 @@
 var express = require('express');
-const Project = require('../model/project');
-var notification = require('../middlewares/notification');
 const auth = require('../middlewares/auth');
 const validation = require('../middlewares/validation');
-const { createError } = require('../common/error');
+const projectController = require('../controller/project-controller');
 var router = express.Router();
 
 router.use((req, res, next) => {
@@ -15,99 +13,26 @@ router.use((req, res, next) => {
     }
 });
 
-/* GET users listing. */
-router.get('/', function (req, res, next) {
-    if (req.user.role.toLowerCase() == "employee") {
-        Project.find({
-            "status": "open"
-        }, { _id: 1, name: 1, role: 1, technology: 1 }, (err, projects) => {
-            if (err) {
-                next(createError(500, err.errorMessage));
-            }
-            else {
-                res.render('project-list', { projects: projects, username: req.user.username, isManager : false });
-            }
-        })
-    }
-    else {
-        Project.find({
-            "createdby": req.user.username
-        }, { _id: 1, name: 1, role: 1, technology: 1 }, (err, projects) => {
-            if (err) {
-                next(createError(500, err.errorMessage));
-            }
-            else {
-                res.render('project-list', { projects: projects, username: req.user.username, isManager: true });
-            }
-        })
-    }
+/* render home page */
+router.get('/', (req, res) => { res.redirect("project/openings") });
 
-});
+/* List all projects available to user */
+router.get('/openings', projectController.getProjectOpenings);
 
-router.get('/create', auth.isManager, function (req, res, next) {
-    res.render('create-project', { username: req.user.username });
-});
+/* Render new project form */
+router.get('/create', auth.isManager, projectController.renderCreateProject);
 
-router.get('/:id', function (req, res, next) {
-    id = req.params.id;
-    Project.find({
-        "_id": id
-    },
-        (err, project) => {
-            if (err) {
-                next(createError(500, err.errorMessage));
-            }
-            else {
-                res.render('project-detail', { project: project[0], username: req.user.username, role: req.user.role });
-            }
-        })
-});
+/* Render project details */
+router.get('/:id', projectController.getProjectDetailsById);
 
+/* create new project opening*/
+router.post('/', auth.isManager, validation.validateCreateProject, projectController.createNewProjectOpening);
 
-router.post('/', auth.isManager, validation.validateCreateProject, function (req, res, next) {
-    const project = new Project(req.body);
-    project.status = 'open';
-    project.createdby = req.user.username
-    project.save((err, savedproject) => {
-        if (err) {
-            next(createError(500, err.errorMessage));
-        }
-        res.redirect('/project');
-    });
-});
+/* change project status */
+router.put('/:id', auth.isManagerOfTheProject, projectController.changeProjectStatus);
 
-
-router.put('/:id', auth.isManagerOfTheProject, function (req, res, next) {
-    var id = req.params.id;
-    Project.update({ _id: id }, { $set: { status: req.body.status } },
-        (err, updatedProject) => {
-            if (err) {
-                next(createError(500, err.errorMessage));
-            }
-            if (req.body.status == 'closed') {
-                notification.eventEmitter.emit('closeProject', id);
-            }
-            res.status(200).send(updatedProject);
-        });
-});
-
-router.put('/:id/apply', auth.isEmployee, async function (req, res, next) {
-    var id = req.params.id;
-    const validationStatus = await validateApplyForProject(id, req.user.username);
-    if (validationStatus.isValid) {
-        Project.update({ _id: id }, { $addToSet: { appliedUsers: req.user.username } },
-            (err, updatedProject) => {
-                if (err) {
-                    next(createError(500, err.errorMessage));
-                }
-                notification.eventEmitter.emit('applyForProject', id, req.user.username);
-                res.status(200).send(updatedProject);
-            })
-    }
-    else {
-        res.status(400).send(validationStatus.errorMessage);
-    }
-});
+/* apply for a project */
+router.put('/:id/apply', auth.isEmployee, projectController.applyForProject);
 
 
 module.exports = router;
